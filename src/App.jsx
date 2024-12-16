@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
-import Login from './components/Login';  // Assuming Login component is in ./components/Login
-import SignUp from './components/SignUp';  // Assuming SignUp component is in ./components/SignUp
-import Home from './components/Home'; // Assuming Home component is in ./components/Home
+import Login from './components/Login';
+import SignUp from './components/SignUp';
+import Home from './components/Home';
 import './assets/styles/App.css';
 
 const App = () => {
     const [user, setUser] = useState(null);
 
     const handleLogout = () => {
-        setUser(null); // Log the user out
+        setUser(null);
     };
 
     return (

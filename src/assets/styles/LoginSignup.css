@@ -8,7 +8,7 @@
     font-family: 'Arial', sans-serif;
 }
 
-/* Form Wrapper (Centered with shadow and rounded corners) */
+/* Form Wrapper */
 .form-wrapper {
     background: white;
     padding: 40px 40px;
@@ -41,7 +41,7 @@ h2 {
     gap: 20px;
 }
 
-/* Each input group (Icon + Input) */
+/* Each input group */
 /* Input field container */
 .input-group {
     position: relative;
@@ -85,7 +85,6 @@ h2 {
     width: 20px;
 }
 
-/* Remove the scale effect from the input field */
 .input-group input:focus {
     border-color: #800020;
     background-color: #fff;
@@ -125,7 +124,7 @@ h2 {
     margin-top: 10px;
 }
 
-/* Toggle Text (Switch between Login and Sign Up) */
+/* Toggle Text  */
 .toggle-text {
     font-size: 14px;
     color: #555;
@@ -144,7 +143,7 @@ h2 {
     text-decoration: none;
 }
 
-/* Responsive Design (For mobile devices) */
+/* Responsive Design */
 @media (max-width: 768px) {
     .form-wrapper {
         padding: 30px 20px;
