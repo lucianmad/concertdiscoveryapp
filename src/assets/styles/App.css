@@ -1,0 +1,129 @@
+/* Body and overall layout */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Slimmed-down Header */
+.app-header {
+  background-color: #800020;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 18px;
+}
+
+.app-header .logo a {
+  color: white;
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.app-header .nav-links {
+  display: flex;
+  gap: 15px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.app-header .nav-links .user-email {
+  color: white;
+  font-size: 14px;
+  align-self: center;
+}
+
+/* Buttons for Login, Sign Up, Logout */
+.btn-login,
+.btn-signup {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Login Button */
+.btn-login {
+  background-color: white;
+  color: #800020;
+}
+
+.btn-login:hover {
+  background-color: #e8f5e9;
+}
+
+/* Sign Up Button */
+.btn-signup {
+  background-color: #4a003f;
+  color: white;
+}
+
+.btn-signup:hover {
+  background-color: #800020;
+}
+
+/* Logout Button */
+.btn-logout {
+  background-color: white;
+  color: #800020;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-logout:hover {
+  background-color: #e8f5e9;
+}
+
+/* Main Content Styles */
+.app-content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Footer Styles */
+.app-footer {
+  background-color: #f4f4f9;
+  padding: 15px;
+  text-align: center;
+  color: #555;
+  font-size: 14px;
+  position: relative;
+  bottom: 0;
+}
+
+.app-footer p {
+  margin: 0;
+  color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .app-header {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .app-header .nav-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

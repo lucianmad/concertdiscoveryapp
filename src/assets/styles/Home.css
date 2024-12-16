@@ -1,0 +1,83 @@
+/* Overall layout for Home Page */
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Header (in Home Page) */
+.home-header {
+    background-color: #800020;
+    color: white;
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* Feed section in Home */
+.feed {
+    width: 100%;
+    max-width: 900px;
+    background-color: white;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Guest view (if not logged in) */
+.guest-view {
+    margin-top: 50px;
+}
+
+.guest-view h2 {
+    font-size: 30px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.guest-view p {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.auth-buttons button {
+    background-color: #800020;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.auth-buttons button:hover {
+    background-color: #4a003f;
+    transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .home-header {
+        font-size: 22px;
+    }
+
+    .feed {
+        margin: 20px;
+        padding: 20px;
+    }
+}

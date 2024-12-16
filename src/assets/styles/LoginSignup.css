@@ -1,0 +1,164 @@
+/* Global container for both forms */
+.login-signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f9;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Form Wrapper (Centered with shadow and rounded corners) */
+.form-wrapper {
+    background: white;
+    padding: 40px 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+/* Title Styling */
+h2 {
+    font-size: 32px;
+    color: #800020;
+    margin-bottom: 15px;
+}
+
+/* Description text under the title */
+.description {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 25px;
+}
+
+/* Styling for the input fields container */
+.inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Each input group (Icon + Input) */
+/* Input field container */
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 12px;
+    transition: all 0.3s ease;
+}
+
+/* Input field styles */
+/* General input field styles */
+.input-group input {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #ddd;
+    background: transparent;
+    outline: none;
+    font-size: 16px;
+    color: #333;
+    padding-left: 40px;
+    padding-right: 10px;
+    border-radius: 8px;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+    will-change: border-color, background-color;
+}
+
+/* Focus effect */
+.input-group input:focus {
+    border-color: #800020;
+    background-color: #fff;
+}
+
+/* Icon inside the input field */
+.input-group img {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+}
+
+/* Remove the scale effect from the input field */
+.input-group input:focus {
+    border-color: #800020;
+    background-color: #fff;
+}
+
+
+/* Submit Button styling */
+.btn-submit {
+    width: 100%;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #800020;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-submit:hover {
+    background-color: #4a003f;
+    transform: scale(1.05);
+}
+
+/* Error and Success Messages */
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.success {
+    color: green;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Toggle Text (Switch between Login and Sign Up) */
+.toggle-text {
+    font-size: 14px;
+    color: #555;
+    margin-top: 20px;
+}
+
+.toggle-text span {
+    color: #800020;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.toggle-text span:hover {
+    color: #4a003f;
+    text-decoration: none;
+}
+
+/* Responsive Design (For mobile devices) */
+@media (max-width: 768px) {
+    .form-wrapper {
+        padding: 30px 20px;
+    }
+
+    h2 {
+        font-size: 28px;
+    }
+
+    .description {
+        font-size: 14px;
+    }
+
+    .inputs {
+        gap: 15px;
+    }
+}
