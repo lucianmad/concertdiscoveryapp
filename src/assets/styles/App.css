@@ -76,21 +76,54 @@ body, html {
   background-color: #800020;
 }
 
-/* Logout Button */
-.btn-logout {
-  background-color: white;
-  color: #800020;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+/* User Dropdown Buttons */
+.user-menu {
+  position: relative;
 }
 
-.btn-logout:hover {
-  background-color: #e8f5e9;
+.user-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width: 150px;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-menu li {
+  padding: 10px;
+}
+
+.dropdown-menu li a,
+.dropdown-menu li button {
+  color: black;
+  text-decoration: none;
+  width: 100%;
+  display: block;
+  text-align: left;
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  padding: 0;
+}
+
+.dropdown-menu li a:hover,
+.dropdown-menu li button:hover {
+  background: #f5f5f5;
 }
 
 /* Main Content Styles */

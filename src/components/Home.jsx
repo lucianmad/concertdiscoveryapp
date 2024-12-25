@@ -8,7 +8,7 @@ const Home = ({ user }) => {
             <main className="feed">
                 {user ? (
                     <div>
-                        <h2>Welcome, {user}!</h2>
+                        <h2>Welcome, {user.username}!</h2>
                         <p>Your feed is currently empty.</p>
                     </div>
                 ) : (

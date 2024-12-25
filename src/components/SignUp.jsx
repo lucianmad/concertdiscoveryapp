@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebaseConfig';
+import { auth, firestore } from '../firebaseConfig';
+import { doc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
 import '../assets/styles/LoginSignup.css'
@@ -17,10 +18,23 @@ const SignUp = ({ setUser }) => {
 
     const handleSignUp = async () => {
         setError('');
+        if (!name) {
+            setError('Username is required.');
+            return;
+        }
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            setUser(user.email);
+
+            await setDoc(doc(firestore, 'users', user.uid), {
+                username: name,
+                email: user.email,
+            });
+
+            setUser({ username: name, email: user.email });
+
+            localStorage.setItem('user', JSON.stringify({ email: user.email, username: name }));
+
             navigate('/');
         } catch (err) {
             setError(err.message);

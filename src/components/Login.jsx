@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebaseConfig';
+import { auth, firestore } from '../firebaseConfig';
+import { doc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
 import '../assets/styles/LoginSignup.css'
@@ -18,7 +19,18 @@ const Login = ({ setUser }) => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            setUser(user.email);
+
+            const userDocRef = doc(firestore, 'users', user.uid);
+            const docSnap = await getDoc(userDocRef);
+
+            if (docSnap.exists()) {
+                const { username } = docSnap.data();
+                setUser({ email: user.email, username: username || "No username set" });
+                localStorage.setItem('user', JSON.stringify({ email: user.email, username }));
+            } else {
+                setError('User data not found.');
+            }
+
             navigate('/');
         } catch (err) {
             setError(err.message);
