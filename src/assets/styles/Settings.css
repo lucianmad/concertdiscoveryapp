@@ -1,0 +1,100 @@
+/* Container for settings */
+.settings-container {
+    padding: 20px 30px;
+    max-width: 600px;
+    margin: 40px auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Headings */
+.settings-container h1 {
+    font-size: 30px;
+    color: #800020;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.settings-container h2 {
+    font-size: 22px;
+    color: #4a003f;
+    margin-bottom: 15px;
+}
+
+/* Form styles */
+.password-change-form {
+    margin-top: 20px;
+    padding: 30px 60px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 0;
+    padding-left: 10px;
+    font-size: 16px;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #800020;
+    box-shadow: 0 0 4px rgba(128, 0, 32, 0.3);
+    outline: none;
+}
+
+/* Button styles */
+.btn-change-password {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #800020;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-change-password:hover {
+    background-color: #4a003f;
+    transform: scale(1.05);
+}
+
+/* Feedback message */
+.form-message {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #800020;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .settings-container {
+        padding: 15px;
+    }
+
+    .btn-change-password {
+        width: 100%;
+        text-align: center;
+    }
+}
