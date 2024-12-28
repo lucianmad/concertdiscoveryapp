@@ -47,12 +47,15 @@ body, html {
 /* Buttons for Login, Sign Up, Logout */
 .btn-login,
 .btn-signup {
-  padding: 6px 12px;
+  background-color: #4a000e;
   border: none;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: bold;
+  color: white;
+  font-size: 20px;
   cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 50px;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
@@ -82,48 +85,99 @@ body, html {
 }
 
 .user-btn {
-  background: none;
+  background-color: #4a000e;
   border: none;
   color: white;
-  font-size: 1rem;
+  font-size: 20px;
   cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 50px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.01);
+}
+
+.user-btn::after {
+  content: ' ▼';
+  font-size: 0.9rem;
+  margin-left: 8px;
 }
 
 .dropdown-menu {
   position: absolute;
-  top: 100%;
-  right: 0;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  list-style: none;
-  padding: 0;
+  top: calc(100% + 10px);
+  left: 0;
+  width: 100%;
+  background-color: #4a000e;
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 0 0 0 0;
   margin: 0;
-  min-width: 150px;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
   z-index: 1000;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+
+.dropdown-menu.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .dropdown-menu li {
-  padding: 10px;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-menu li img {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
 }
 
 .dropdown-menu li a,
 .dropdown-menu li button {
-  color: black;
   text-decoration: none;
-  width: 100%;
-  display: block;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  flex: 1;
   text-align: left;
   background: none;
   border: none;
-  font-size: 0.9rem;
-  padding: 0;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-.dropdown-menu li a:hover,
-.dropdown-menu li button:hover {
-  background: #f5f5f5;
+.dropdown-menu li:hover {
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-logout {
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 /* Main Content Styles */

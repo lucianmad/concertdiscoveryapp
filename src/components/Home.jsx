@@ -9,7 +9,6 @@ const Home = ({ user }) => {
                 {user ? (
                     <div>
                         <h2>Welcome, {user.username}!</h2>
-                        <p>Your feed is currently empty.</p>
                     </div>
                 ) : (
                     <div className="guest-view">
