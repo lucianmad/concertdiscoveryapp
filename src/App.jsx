@@ -14,6 +14,37 @@ const App = () => {
         const savedUser = localStorage.getItem('user');
         return savedUser ? JSON.parse(savedUser) : null;
     });
+
+    useEffect(() => {
+        if (user) {
+            localStorage.setItem('user', JSON.stringify(user));
+        }
+    }, [user]);
+
+    return (
+        <Router>
+            <div className="app-container">
+                <Header user={user} setUser={setUser} />
+                <main className="app-content">
+                    <Routes>
+                        <Route path="/" element={<Home user={user} />} />
+                        <Route path="/login" element={<Login setUser={setUser} />} />
+                        <Route path="/signup" element={<SignUp setUser={setUser} />} />
+                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/settings" element={<Settings />} />
+                        <Route path="*" element={<Home user={user} />} /> {/* Fallback route */}
+                    </Routes>
+                </main>
+                <footer className="app-footer">
+                    <p>&copy; 2024 Concert Discovery. All rights reserved.</p>
+                </footer>
+            </div>
+        </Router>
+    );
+};
+
+const Header = ({ user, setUser }) => {
+    const navigate = useNavigate();
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -21,6 +52,7 @@ const App = () => {
         setUser(null);
         localStorage.removeItem('user');
         setDropdownVisible(false);
+        navigate('/');
     };
 
     const toggleDropdown = () => {
@@ -44,83 +76,52 @@ const App = () => {
         };
     }, []);
 
-    useEffect(() => {
-        if (user) {
-            localStorage.setItem('user', JSON.stringify(user));
-        }
-    }, [user]);
-
     return (
-        <Router>
-            <div className="app-container">
-                <header className="app-header">
-                    <h1 className="logo">
-                        <Link to="/" onClick={closeDropdown}>Concert Discovery</Link>
-                    </h1>
-                    <nav>
-                        <ul className="nav-links">
-                            {user ? (
-                                <>
-                                    <li className="user-menu" ref={dropdownRef}>
-                                        <button onClick={toggleDropdown} className="user-btn">
-                                            {user.username}
-                                        </button>
-                                        <ul className={`dropdown-menu ${dropdownVisible ? 'show' : ''}`}>
-                                            <li>
-                                                <FaUser size={20} color="white" />
-                                                <Link to="/profile" onClick={closeDropdown}>Profile</Link>
-                                            </li>
-                                            <li>
-                                                <FaCog size={20} color="white" />
-                                                <Link to="/settings" onClick={closeDropdown}>Settings</Link>
-                                            </li>
-                                            <li>
-                                                <FaSignOutAlt size={20} color="white" />
-                                                <button className="btn-logout" onClick={() => {handleLogout(); closeDropdown();}}>
-                                                    Logout
-                                                </button>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </>
-                            ) : (
-                                <>
-                                    <li>
-                                        <NavBarButton
-                                            label="Login"
-                                            navigateTo="/login"
-                                            variant="login"
-                                        />
-                                    </li>
-                                    <li>
-                                        <NavBarButton
-                                            label="Sign Up"
-                                            navigateTo="/signup"
-                                            variant="signup"
-                                        />
-                                    </li>
-                                </>
-                            )}
-                        </ul>
-                    </nav>
-                </header>
-
-                <main className="app-content">
-                    <Routes>
-                        <Route path="/" element={<Home user={user}/>}/>
-                        <Route path="/login" element={<Login setUser={setUser}/>}/> {}
-                        <Route path="/signup" element={<SignUp setUser={setUser} />} />  {}
-                        <Route path="/profile" element={<Profile />} />
-                        <Route path="/settings" element={<Settings />} />
-
-                    </Routes>
-                </main>
-
-                <footer className="app-footer">
-                    <p>&copy; 2024 Concert Discovery. All rights reserved.</p>
-                </footer>
-            </div>
-        </Router>
+        <header className="app-header">
+            <h1 className="logo">
+                <Link to="/" onClick={closeDropdown}>Concert Discovery</Link>
+            </h1>
+            <nav>
+                <ul className="nav-links">
+                    {user ? (
+                        <li className="user-menu" ref={dropdownRef}>
+                            <button onClick={toggleDropdown} className="user-btn">
+                                {user.username}
+                            </button>
+                            <ul className={`dropdown-menu ${dropdownVisible ? 'show' : ''}`}>
+                                <li>
+                                    <Link to="/profile" onClick={closeDropdown} className="dropdown-item">
+                                        <FaUser size={20} />
+                                        <span>Profile</span>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="/settings" onClick={closeDropdown} className="dropdown-item">
+                                        <FaCog size={20} />
+                                        <span>Settings</span>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <button onClick={handleLogout} className="dropdown-item">
+                                        <FaSignOutAlt size={20} />
+                                        <span>Logout</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </li>
+                    ) : (
+                        <>
+                            <li>
+                                <NavBarButton label="Login" navigateTo="/login" variant="login" />
+                            </li>
+                            <li>
+                                <NavBarButton label="Sign Up" navigateTo="/signup" variant="signup" />
+                            </li>
+                        </>
+                    )}
+                </ul>
+            </nav>
+        </header>
     );
 };
 

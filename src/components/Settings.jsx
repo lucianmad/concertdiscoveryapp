@@ -31,6 +31,10 @@ const Settings = () => {
 
                 await updatePassword(user, newPassword);
                 setMessage('Password changed successfully!');
+
+                setCurrentPassword('');
+                setNewPassword('');
+                setConfirmPassword('');
             } catch (error) {
                 console.error('Error:', error);
                 if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {

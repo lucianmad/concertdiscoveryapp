@@ -127,6 +127,7 @@ body, html {
   transition: opacity 0.3s ease, transform 0.3s ease;
   z-index: 1000;
   display: none;
+  list-style: none;
 }
 
 .dropdown-menu.show {
@@ -135,49 +136,37 @@ body, html {
   transform: translateY(0);
 }
 
-.dropdown-menu li {
-  list-style: none;
+.dropdown-item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
   padding: 10px 15px;
-  border-radius: 8px;
-  transition: background-color 0.2s ease;
-}
-
-.dropdown-menu li img {
-  width: 24px;
-  height: 24px;
-  border-radius: 4px;
-}
-
-.dropdown-menu li a,
-.dropdown-menu li button {
   text-decoration: none;
+  text-align: left;
   color: white;
   font-size: 1rem;
   font-weight: 500;
-  flex: 1;
-  text-align: left;
+  border-radius: 8px;
   background: none;
   border: none;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.dropdown-menu li:hover {
+.dropdown-item:hover {
   padding: 10px;
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-.btn-logout {
-  background-color: transparent;
-  border: none;
-  color: white;
-  font-size: 1rem;
-  font-weight: 600;
+.dropdown-item button {
+  all: unset;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+}
+
+.dropdown-item span {
+  flex: 1;
 }
 
 /* Main Content Styles */
