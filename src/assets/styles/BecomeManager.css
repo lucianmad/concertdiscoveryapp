@@ -1,0 +1,88 @@
+.become-manager-container {
+    padding: 20px;
+    max-width: 600px;
+    margin: 40px auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.become-manager-container h1 {
+    font-size: 28px;
+    color: #800020;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.become-manager-form {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input {
+    width: 96%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #800020;
+    outline: none;
+}
+
+.btn-submit {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    color: #fff;
+    background-color: #800020;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+    background-color: #4a003f;
+}
+
+.form-message {
+    margin-top: 15px;
+    font-size: 16px;
+    color: #800020;
+    text-align: center;
+}
+
+.btn-back-to-profile {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #800020;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-back-to-profile:hover {
+    background-color: #4a003f;
+}

@@ -5,6 +5,8 @@ import SignUp from './components/SignUp';
 import Profile from './components/Profile';
 import Settings from "./components/Settings";
 import Home from './components/Home';
+import ChangeProfilePicture from './components/ChangeProfilePicture';
+import BecomeManager from './components/BecomeManager';
 import './assets/styles/App.css';
 import { FaUser, FaCog, FaSignOutAlt } from 'react-icons/fa';
 
@@ -30,7 +32,19 @@ const App = () => {
                         <Route path="/" element={<Home user={user} />} />
                         <Route path="/login" element={<Login setUser={setUser} />} />
                         <Route path="/signup" element={<SignUp setUser={setUser} />} />
-                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/profile" element={<Profile username={user?.username} profilePicture={user?.profilePicture} />} />
+                        <Route
+                            path="/change-profile-picture"
+                            element={
+                                <ChangeProfilePicture
+                                    onUpdateProfilePicture={(newPicture) => {
+                                        const updatedUser = { ...user, profilePicture: newPicture };
+                                        setUser(updatedUser);
+                                    }}
+                                />
+                            }
+                        />
+                        <Route path="/become-manager" element={<BecomeManager />} />
                         <Route path="/settings" element={<Settings />} />
                         <Route path="*" element={<Home user={user} />} /> {/* Fallback route */}
                     </Routes>

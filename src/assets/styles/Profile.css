@@ -1,0 +1,89 @@
+/* Container for the entire profile page */
+.profile-page {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 20px;
+}
+
+/* Ribbon menu on the left */
+.profile-menu {
+    flex: 0 0 200px;
+    background-color: #800020;
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    height: 100%;
+}
+
+.profile-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.profile-menu li {
+    padding: 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+    text-align: left;
+}
+
+/* Link styling within the profile menu */
+.profile-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: inherit;
+    display: block;
+}
+
+/* Hover effect for list items */
+.profile-menu li:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Main content area */
+.profile-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: #333;
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+}
+
+/* Profile picture styles */
+.profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+}
+
+/* Username styles */
+.username {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.profile-main p {
+    font-size: 1rem;
+    color: #555;
+}
