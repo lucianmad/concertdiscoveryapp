@@ -64,6 +64,23 @@ exports.sendEmail = functions.https.onRequest(
     }
 );
 
+exports.artistProfile = functions.https.onRequest((req, res) => {
+    corsHandler(req, res, async () => {
+        if (req.method !== "POST") {
+            return res.status(405).send({ error: "Method Not Allowed" });
+        }
+
+        try {
+            const { artistName, userId, email } = req.body;
+            console.log('Received artist profile data:', { artistName, userId, email });
+
+            return res.status(200).json({ message: 'Artist status linked successfully!' });
+        } catch (error) {
+            console.error('Error in artistProfile:', error);
+            return res.status(500).send({ error: 'Internal Server Error' });
+        }
+    });
+});
 
 
 // Create and deploy your first functions

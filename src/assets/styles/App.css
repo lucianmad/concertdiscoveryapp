@@ -115,7 +115,7 @@ body, html {
   position: absolute;
   top: calc(100% + 10px);
   left: 0;
-  width: 110%;
+  width: 100%;
   background-color: #4a000e;
   color: white;
   border-radius: 8px;

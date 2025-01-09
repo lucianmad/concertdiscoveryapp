@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, firestore } from '../firebaseConfig';
+import { auth, firestore, storage } from '../firebaseConfig';
 import { doc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import { ref, getDownloadURL } from 'firebase/storage';
 
 import '../assets/styles/LoginSignup.css'
 import user_icon from '../assets/person.png';
@@ -29,11 +30,12 @@ const SignUp = ({ setUser }) => {
             await setDoc(doc(firestore, 'users', user.uid), {
                 username: name,
                 email: user.email,
+                isArtist: false,
             });
 
-            setUser({ username: name, email: user.email });
+            setUser({ username: name, email: user.email, isArtist: false });
 
-            localStorage.setItem('user', JSON.stringify({ email: user.email, username: name }));
+            localStorage.setItem('user', JSON.stringify({ email: user.email, username: name, isArtist: false }));
 
             navigate('/');
         } catch (err) {

@@ -6,7 +6,10 @@ import Profile from './components/Profile';
 import Settings from "./components/Settings";
 import Home from './components/Home';
 import ChangeProfilePicture from './components/ChangeProfilePicture';
+import BecomeArtist from './components/BecomeArtist';
+import ArtistProfile from './components/ArtistProfile';
 import BecomeManager from './components/BecomeManager';
+import DeleteAccount from './components/DeleteAccount';
 import './assets/styles/App.css';
 import { FaUser, FaCog, FaSignOutAlt } from 'react-icons/fa';
 
@@ -32,7 +35,16 @@ const App = () => {
                         <Route path="/" element={<Home user={user} />} />
                         <Route path="/login" element={<Login setUser={setUser} />} />
                         <Route path="/signup" element={<SignUp setUser={setUser} />} />
-                        <Route path="/profile" element={<Profile username={user?.username} profilePicture={user?.profilePicture} />} />
+                        <Route
+                            path="/profile"
+                            element={
+                                <Profile
+                                    username={user?.username}
+                                    profilePicture={user?.profilePicture}
+                                    isArtist={user?.isArtist}
+                                />
+                            }
+                        />
                         <Route
                             path="/change-profile-picture"
                             element={
@@ -44,8 +56,14 @@ const App = () => {
                                 />
                             }
                         />
+                        <Route path="/become-artist" element={<BecomeArtist user={user} setUser={setUser} />}/>
+                        <Route path="/artist-profile" element={<ArtistProfile />} />
+                        {/* <Route path="/pending-requests" element={<PendingRequests />} />
+                        <Route path="/accepted-requests" element={<AcceptedRequests />} />
+                        <Route path="/declined-requests" element={<DeclinedRequests />} /> */}
                         <Route path="/become-manager" element={<BecomeManager />} />
                         <Route path="/settings" element={<Settings />} />
+                        <Route path="/delete-account" element={<DeleteAccount />} />
                         <Route path="*" element={<Home user={user} />} /> {/* Fallback route */}
                     </Routes>
                 </main>
@@ -104,7 +122,11 @@ const Header = ({ user, setUser }) => {
                             </button>
                             <ul className={`dropdown-menu ${dropdownVisible ? 'show' : ''}`}>
                                 <li>
-                                    <Link to="/profile" onClick={closeDropdown} className="dropdown-item">
+                                    <Link
+                                        to={user.isArtist ? "/artist-profile" : "/profile"}
+                                        onClick={closeDropdown}
+                                        className="dropdown-item"
+                                    >
                                         <FaUser size={20} />
                                         <span>Profile</span>
                                     </Link>

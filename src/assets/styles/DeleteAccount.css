@@ -1,0 +1,103 @@
+/* Container for Delete Account Page */
+.delete-account-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+}
+
+/* Header Section */
+.delete-account-header {
+    background-color: #800020;
+    color: white;
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    border-bottom: 5px solid #4a003f;
+}
+
+/* Content Section */
+.delete-account-content {
+    max-width: 600px;
+    background-color: white;
+    padding: 30px;
+    margin: 40px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Headline for confirmation */
+.delete-account-content h2 {
+    font-size: 26px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* Description for data deletion */
+.delete-account-content p {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+/* Buttons Section */
+.delete-account-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Delete Button Style */
+.delete-button {
+    background-color: #800020;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.delete-button:hover {
+    background-color: #4a003f;
+    transform: scale(1.05);
+}
+
+/* Cancel Button Style */
+.cancel-button {
+    background-color: #ccc;
+    color: #333;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.cancel-button:hover {
+    background-color: #999;
+    transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .delete-account-content {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    .delete-account-content h2 {
+        font-size: 22px;
+    }
+}

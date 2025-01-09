@@ -1,16 +1,29 @@
-import React from 'react';
-import {Link} from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import {Link, useNavigate} from "react-router-dom";
 import '../assets/styles/Profile.css';
 
-const Profile = ({ username, profilePicture }) => {
+const Profile = ({ username, profilePicture, isArtist }) => {
     const defaultProfilePicture = "https://cdn-icons-png.flaticon.com/512/11039/11039534.png";
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (isArtist) {
+            navigate('/artist-profile');
+        }
+        setLoading(false);
+    }, [isArtist, navigate]);
+
+    if (loading) {
+        return <p>Loading...</p>;
+    }
 
     return (
         <div className="profile-page">
             <div className="profile-menu">
                 <ul>
                     <li><Link to="/change-profile-picture">Change Profile Picture</Link></li>
-                    <li>Become an Artist</li>
+                    <li><Link to="/become-artist">Become an Artist</Link></li>
                     <li><Link to="/become-manager">Become a Manager</Link></li>
                 </ul>
             </div>

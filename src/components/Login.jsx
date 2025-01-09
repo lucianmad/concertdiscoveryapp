@@ -24,9 +24,9 @@ const Login = ({ setUser }) => {
             const docSnap = await getDoc(userDocRef);
 
             if (docSnap.exists()) {
-                const { username } = docSnap.data();
-                setUser({ email: user.email, username: username || "No username set" });
-                localStorage.setItem('user', JSON.stringify({ email: user.email, username }));
+                const { username, profilePicture, isArtist } = docSnap.data();
+                setUser({ email: user.email, username: username || "No username set", profilePicture, isArtist: isArtist || false });
+                localStorage.setItem('user', JSON.stringify({ email: user.email, username, profilePicture, isArtist: isArtist || false }));
             } else {
                 setError('User data not found.');
             }
