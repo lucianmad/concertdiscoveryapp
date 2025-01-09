@@ -2,13 +2,20 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/styles/BecomeArtist.css';
 import { auth, firestore } from '../firebaseConfig';
-import {doc, updateDoc} from "firebase/firestore";
+import {doc, getDoc, setDoc, updateDoc} from "firebase/firestore";
 
-const BecomeArtist = ({ user, setUser }) => {
+const BecomeArtist = () => {
+
+    const [user, setUser] = useState(() => {
+        const savedUser = localStorage.getItem('user');
+        return savedUser ? JSON.parse(savedUser) : null;
+    });
+
     const [artistName, setArtistName] = useState('');
     const [status, setStatus] = useState('');
     const [showBackButton, setShowBackButton] = useState(false);
     const navigate = useNavigate();
+    const defaultProfilePicture = "https://cdn-icons-png.flaticon.com/512/11039/11039534.png";
 
     const handleFacebookLogin = () => {
         FB.login((response) => {
@@ -53,11 +60,29 @@ const BecomeArtist = ({ user, setUser }) => {
             const user = auth.currentUser;
             if (user) {
                 const userDocRef = doc(firestore, 'users', user.uid);
-                await updateDoc(userDocRef, {
-                    isArtist: true,
-                    username: artistName,
-                });
-                console.log('Firestore document updated successfully');
+                const userDocSnap = await getDoc(userDocRef);
+
+                if (userDocSnap.exists()) {
+                    const userProfilePicture = userDocSnap.data().profilePicture || defaultProfilePicture;
+
+                    await updateDoc(userDocRef, {
+                        isArtist: true,
+                        username: artistName,
+                    });
+
+                    const artistDocRef = doc(firestore, 'artists', user.uid);
+                    await setDoc(artistDocRef, {
+                        artistName: artistName,
+                        userId: user.uid,
+                        email: userData.email,
+                        profilePicture: userProfilePicture,
+                        createdAt: new Date(),
+                    });
+
+                    console.log('Firestore document updated and artist profile created successfully');
+                } else {
+                    console.error('User document not found in Firestore');
+                }
             }
 
             const response = await fetch('https://artistprofile-4gbyv5twhq-uc.a.run.app', {

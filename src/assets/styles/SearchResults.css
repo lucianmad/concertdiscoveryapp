@@ -1,0 +1,44 @@
+.search-results {
+    padding: 20px 200px;
+}
+
+.search-results h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.results-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.artist-card {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.2s ease;
+    height: 90px;
+}
+
+.artist-card:hover {
+    background-color: #e8e8e8;
+}
+
+.artist-profile-picture {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.artist-name {
+    font-size: 22px;
+    font-weight: 500;
+}

@@ -66,7 +66,7 @@ const ArtistProfile = () => {
                     />
                     <h2 className="username">{username}</h2>
                 </div>
-                <p>Welcome, Artist! Manage your requests below.</p>
+                <p>Welcome, Artist! Manage your requests on the left.</p>
             </div>
         </div>
     );

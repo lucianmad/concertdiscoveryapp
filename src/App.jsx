@@ -10,6 +10,8 @@ import BecomeArtist from './components/BecomeArtist';
 import ArtistProfile from './components/ArtistProfile';
 import BecomeManager from './components/BecomeManager';
 import DeleteAccount from './components/DeleteAccount';
+import SearchResults from './components/SearchResults';
+import PublicArtistProfile from './components/PublicArtistProfile';
 import './assets/styles/App.css';
 import { FaUser, FaCog, FaSignOutAlt } from 'react-icons/fa';
 
@@ -35,6 +37,8 @@ const App = () => {
                         <Route path="/" element={<Home user={user} />} />
                         <Route path="/login" element={<Login setUser={setUser} />} />
                         <Route path="/signup" element={<SignUp setUser={setUser} />} />
+                        <Route path="/search" element={<SearchResults />} />
+                        <Route path="/artist/:userId" element={<PublicArtistProfile />} />
                         <Route
                             path="/profile"
                             element={
@@ -79,6 +83,7 @@ const Header = ({ user, setUser }) => {
     const navigate = useNavigate();
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const dropdownRef = useRef(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const handleLogout = () => {
         setUser(null);
@@ -93,6 +98,12 @@ const Header = ({ user, setUser }) => {
 
     const closeDropdown = () => {
         setDropdownVisible(false);
+    };
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        console.log('Search Query:', searchQuery);
+        navigate(`/search?query=${searchQuery}`);
     };
 
     useEffect(() => {
@@ -113,6 +124,15 @@ const Header = ({ user, setUser }) => {
             <h1 className="logo">
                 <Link to="/" onClick={closeDropdown}>Concert Discovery</Link>
             </h1>
+            <form className="search-bar" onSubmit={handleSearch}>
+                <input
+                    type="text"
+                    placeholder="Search artists..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <button type="submit">Search</button>
+            </form>
             <nav>
                 <ul className="nav-links">
                     {user ? (
@@ -127,19 +147,19 @@ const Header = ({ user, setUser }) => {
                                         onClick={closeDropdown}
                                         className="dropdown-item"
                                     >
-                                        <FaUser size={20} />
+                                        <FaUser size={20}/>
                                         <span>Profile</span>
                                     </Link>
                                 </li>
                                 <li>
                                     <Link to="/settings" onClick={closeDropdown} className="dropdown-item">
-                                        <FaCog size={20} />
+                                        <FaCog size={20}/>
                                         <span>Settings</span>
                                     </Link>
                                 </li>
                                 <li>
                                     <button onClick={handleLogout} className="dropdown-item">
-                                        <FaSignOutAlt size={20} />
+                                        <FaSignOutAlt size={20}/>
                                         <span>Logout</span>
                                     </button>
                                 </li>
@@ -148,10 +168,10 @@ const Header = ({ user, setUser }) => {
                     ) : (
                         <>
                             <li>
-                                <NavBarButton label="Login" navigateTo="/login" variant="login" />
+                                <NavBarButton label="Login" navigateTo="/login" variant="login"/>
                             </li>
                             <li>
-                                <NavBarButton label="Sign Up" navigateTo="/signup" variant="signup" />
+                                <NavBarButton label="Sign Up" navigateTo="/signup" variant="signup"/>
                             </li>
                         </>
                     )}
@@ -161,7 +181,7 @@ const Header = ({ user, setUser }) => {
     );
 };
 
-const NavBarButton = ({ label, navigateTo, variant }) => {
+const NavBarButton = ({label, navigateTo, variant}) => {
     const navigate = useNavigate();
 
     const buttonClass =
