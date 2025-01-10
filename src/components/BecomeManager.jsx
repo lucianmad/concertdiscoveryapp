@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { auth, firestore } from '../firebaseConfig';
+import { collection, addDoc } from 'firebase/firestore';
 import '../assets/styles/BecomeManager.css';
 
 const BecomeManager = () => {
@@ -23,20 +25,23 @@ const BecomeManager = () => {
         setStatus("Submitting...");
 
         try {
-            const response = await fetch("https://sendemail-4gbyv5twhq-uc.a.run.app", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
+            const user = auth.currentUser;
+            if (!user) {
+                throw new Error('You must be logged in to submit this form.');
+            }
+
+            const applicationsRef = collection(firestore, 'managerApplications');
+            await addDoc(applicationsRef, {
+                userId: user.uid,
+                fullName: formData.fullName,
+                organizationName: formData.organizationName,
+                email: formData.email,
+                timestamp: new Date(),
+                status: "pending",
             });
 
-            if (response.ok) {
-                setStatus("Your application has been submitted!");
-                setShowBackButton(true);
-            } else {
-                setStatus("Failed to submit. Please try again later.");
-            }
+            setStatus("Your application has been submitted! An admin will review it shortly.");
+            setShowBackButton(true);
         } catch (error) {
             console.error("Error submitting form:", error);
             setStatus("Error occurred. Please try again.");
@@ -100,7 +105,6 @@ const BecomeManager = () => {
                     Back to Profile
                 </button>
             )}
-
         </div>
     );
 };

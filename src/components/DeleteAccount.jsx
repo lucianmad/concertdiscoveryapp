@@ -3,7 +3,6 @@ import '../assets/styles/DeleteAccount.css';
 
 const DeleteAccount = () => {
     const handleDeleteRequest = () => {
-        // Replace with the actual logic for handling data deletion request
         alert('Your account deletion request has been received. We will process it shortly.');
     };
 

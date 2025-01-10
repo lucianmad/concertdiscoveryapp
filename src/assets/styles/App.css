@@ -204,7 +204,9 @@ body, html {
   }
 }
 
+/* Search Bar Styles */
 .search-bar {
+  position: relative;
   display: flex;
   align-items: center;
   flex-grow: 1;
@@ -212,28 +214,75 @@ body, html {
   max-width: 500px;
 }
 
+.search-input-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
 .search-bar input {
   width: 100%;
-  padding: 10px;
+  padding: 10px 40px 10px 15px;
   border: 1px solid #ccc;
-  border-radius: 50px 0 0 50px;
+  border-radius: 50px;
   font-size: 16px;
   outline: none;
+  background-color: #f4f4f9;
+  transition: border-color 0.3s ease;
 }
 
-.search-bar button {
-  padding: 10px 20px;
-  border: 1px solid #ccc;
-  border-radius: 0 50px 50px 0;
-  background-color: #4a000e;
-  color: white;
-  font-size: 16px;
+.search-bar input:focus {
+  border-color: #800020;
+}
+
+.search-button {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  color: #800020;
+  font-size: 16px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.search-bar button:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+.search-results-dropdown {
+  color: #800020;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  margin-top: 5px;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.search-result-item:hover {
+  background-color: #f4f4f9;
+}
+
+.search-result-image {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
 }
 
 /* Responsive Design */
@@ -243,12 +292,8 @@ body, html {
     max-width: 100%;
   }
 
-  .search-bar input {
-    border-radius: 50px;
-  }
-
-  .search-bar button {
-    border-radius: 50px;
-    margin-left: 10px;
+  .search-results-dropdown {
+    width: calc(100% - 20px);
+    left: 10px;
   }
 }

@@ -9,7 +9,7 @@ import '../assets/styles/ChangeProfilePicture.css';
 const ChangeProfilePicture = ({ onUpdateProfilePicture }) => {
     const [imageUrl, setImageUrl] = useState('');
     const [selectedFile, setSelectedFile] = useState(null);
-    const [status, setStatus] = useState(''); // Added status for user feedback
+    const [status, setStatus] = useState('');
     const navigate = useNavigate();
 
     const handleFileChange = (e) => {

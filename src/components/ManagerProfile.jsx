@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { auth, firestore } from '../firebaseConfig';
-import '../assets/styles/ArtistProfile.css';
+import { doc, getDoc } from 'firebase/firestore';
+import '../assets/styles/ManagerProfile.css';
 import '../assets/styles/Profile.css';
-import {doc, getDoc} from "firebase/firestore";
 
-const ArtistProfile = () => {
+const ManagerProfile = () => {
     const defaultProfilePicture = "https://cdn-icons-png.flaticon.com/512/11039/11039534.png";
     const [username, setUsername] = useState("Anonymous");
     const [profilePicture, setProfilePicture] = useState(defaultProfilePicture);
@@ -42,23 +42,27 @@ const ArtistProfile = () => {
         navigate('/declined-requests');
     };
 
+    const handleCreateEvent = () => {
+        navigate('/create-event');
+    };
+
     if (loading) {
         return <p>Loading...</p>;
     }
 
     return (
-        <div className="profile-page">
+        <div className="manager-profile-page">
             <div className="profile-menu">
                 <ul>
-                    <li><Link to="/favorites">Your Favorite Artists</Link></li>
                     <li><Link to="/change-profile-picture">Change Profile Picture</Link></li>
                     <li><button onClick={handlePendingRequests} className="menu-button">Pending Requests</button></li>
                     <li><button onClick={handleAcceptedRequests} className="menu-button">Accepted Requests</button></li>
                     <li><button onClick={handleDeclinedRequests} className="menu-button">Declined Requests</button></li>
+                    <li><button onClick={handleCreateEvent} className="menu-button">Create Event</button></li>
                 </ul>
             </div>
             <div className="profile-main">
-                <h1>Artist Profile</h1>
+                <h1>Manager Profile</h1>
                 <div className="profile-info">
                     <img
                         src={profilePicture}
@@ -67,10 +71,10 @@ const ArtistProfile = () => {
                     />
                     <h2 className="username">{username}</h2>
                 </div>
-                <p>Welcome, Artist! Manage your requests on the left.</p>
+                <p>Welcome, Manager! Manage your requests on the left.</p>
             </div>
         </div>
     );
 };
 
-export default ArtistProfile;
+export default ManagerProfile;
