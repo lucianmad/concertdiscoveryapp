@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { collection, query, where, getDocs, doc, getDoc, addDoc } from 'firebase/firestore';
+import {collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc} from 'firebase/firestore';
 import { firestore, auth } from '../firebaseConfig';
 import '../assets/styles/AcceptedRequests.css';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -61,9 +61,19 @@ const AcceptedRequests = () => {
             const requestsWithEventDetails = await Promise.all(
                 uniqueRequests.map(async (request) => {
                     const eventDoc = await getDoc(doc(firestore, 'events', request.eventId));
+
+                    const postQuery = query(
+                        collection(firestore, 'posts'),
+                        where('eventId', '==', request.eventId),
+                        where('artistId', '==', userId)
+                    );
+                    const postSnapshot = await getDocs(postQuery);
+                    const isPublished = !postSnapshot.empty;
+
                     return {
                         ...request,
                         event: eventDoc.exists() ? eventDoc.data() : null,
+                        isPublished,
                     };
                 })
             );
@@ -98,10 +108,17 @@ const AcceptedRequests = () => {
                         eventPhotoUrl: selectedEvent.eventPhotoUrl || "https://cdn-icons-png.flaticon.com/512/11039/11039534.png",
                         timestamp: new Date(),
                     });
+
+                    const pendingRequestRef = doc(firestore, 'pendingRequests', selectedEvent.requestId);
+                    await updateDoc(pendingRequestRef, {
+                        published: true,
+                    });
+
                     alert('Post published successfully!');
                     setShowPostModal(false);
                     setPostDescription('');
                     setSelectedEvent(null);
+                    await fetchAcceptedRequests(user.uid);
                 } else {
                     alert('User data not found. Please try again.');
                 }
@@ -112,8 +129,19 @@ const AcceptedRequests = () => {
         }
     };
 
-    const openPostModal = (eventId, eventName, eventPhotoUrl) => {
-        setSelectedEvent({ eventId, eventName, eventPhotoUrl });
+    const openPostModal = (requestId, eventId, eventName, eventPhotoUrl) => {
+        if (!requestId || !eventId || !eventName) {
+            console.error("Missing required fields for selectedEvent:", { requestId, eventId, eventName });
+            alert("Failed to open post modal. Missing required event details.");
+            return;
+        }
+
+        setSelectedEvent({
+            requestId,
+            eventId,
+            eventName,
+            eventPhotoUrl: eventPhotoUrl || "https://cdn-icons-png.flaticon.com/512/11039/11039534.png",
+        });
         setShowPostModal(true);
     };
 
@@ -143,12 +171,16 @@ const AcceptedRequests = () => {
                                         <p><strong>Date:</strong> {request.event.date}</p>
                                         <p><strong>Description:</strong> {request.event.description}</p>
                                         {request.role === 'artist' && (
-                                            <button
-                                                onClick={() => openPostModal(request.eventId, request.event.name, request.event.photoUrl)}
-                                                className="publish-post-button"
-                                            >
-                                                Publish Post
-                                            </button>
+                                            request.isPublished ? (
+                                                <p className="published-message">You have published this upcoming concert</p>
+                                            ) : (
+                                                <button
+                                                    onClick={() => openPostModal(request.id, request.eventId, request.event.name, request.event.photoUrl)}
+                                                    className="publish-post-button"
+                                                >
+                                                    Publish Post
+                                                </button>
+                                            )
                                         )}
                                     </div>
                                 </>

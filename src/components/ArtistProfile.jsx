@@ -3,13 +3,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import { auth, firestore } from '../firebaseConfig';
 import '../assets/styles/ArtistProfile.css';
 import '../assets/styles/Profile.css';
-import { doc, getDoc } from 'firebase/firestore';
+import {doc, getDoc, updateDoc} from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 
 const ArtistProfile = () => {
     const defaultProfilePicture = "https://cdn-icons-png.flaticon.com/512/11039/11039534.png";
     const [username, setUsername] = useState("Anonymous");
     const [profilePicture, setProfilePicture] = useState(defaultProfilePicture);
+    const [publicDescription, setPublicDescription] = useState("");
+    const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
@@ -22,6 +24,7 @@ const ArtistProfile = () => {
                     const userData = docSnap.data();
                     setUsername(userData.username || "Anonymous");
                     setProfilePicture(userData.profilePicture || defaultProfilePicture);
+                    setPublicDescription(userData.publicDescription || "");
                 }
             } else {
                 navigate('/login');
@@ -31,6 +34,21 @@ const ArtistProfile = () => {
 
         return () => unsubscribe();
     }, [navigate]);
+
+    const handleSaveDescription = async () => {
+        const user = auth.currentUser;
+        if (user) {
+            const userDocRef = doc(firestore, 'users', user.uid);
+            await updateDoc(userDocRef, {
+                publicDescription: publicDescription,
+            });
+            setIsEditing(false);
+        }
+    };
+
+    const handleEditDescription = () => {
+        setIsEditing(true); // Enter edit mode
+    };
 
     const handlePendingRequests = () => {
         navigate('/pending-requests');
@@ -69,7 +87,28 @@ const ArtistProfile = () => {
                     />
                     <h2 className="username">{username}</h2>
                 </div>
-                <p>Welcome, Artist! Manage your requests on the left.</p>
+                <div className="description-section">
+                    {isEditing ? (
+                        <>
+                            <textarea
+                                value={publicDescription}
+                                onChange={(e) => setPublicDescription(e.target.value)}
+                                placeholder="Add a public description..."
+                                className="description-textarea"
+                            />
+                            <button onClick={handleSaveDescription} className="save-button">
+                                Save Description
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <p className="description-view">{publicDescription || "No description added yet."}</p>
+                            <button onClick={handleEditDescription} className="edit-button">
+                                Edit Description
+                            </button>
+                        </>
+                    )}
+                </div>
             </div>
         </div>
     );

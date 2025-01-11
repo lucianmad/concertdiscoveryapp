@@ -53,17 +53,23 @@
 }
 
 .remove-favorite-button {
-    padding: 5px 10px;
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    border-radius: 4px;
+    padding: 10px 20px;
+    background-color: white;
+    color: #800020;
+    border: 2px solid #800020;
+    border-radius: 28px;
     cursor: pointer;
-    font-size: 14px;
-    margin-left: 10px;
-    height: 50px;
+    font-size: 18px;
+    margin-top: 15px;
+    width: 240px;
+    height: 60px;
+    text-align: center;
+    white-space: nowrap;
+    transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease, border 0.3s ease;
+    margin-bottom: 20px;
 }
 
 .remove-favorite-button:hover {
-    background-color: #cc0000;
+    transform: scale(1.02);
+    background-color: white;
 }

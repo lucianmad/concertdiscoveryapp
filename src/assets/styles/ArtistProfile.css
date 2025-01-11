@@ -12,7 +12,7 @@
 }
 
 .profile-info {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .profile-picture {
@@ -23,9 +23,63 @@
 }
 
 .username {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
+    color: #333;
+    margin-bottom: 7px;
+}
+
+.description-textarea {
+    width: 100%;
+    height: 50px;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.save-button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #800020;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    align-self: center;
+}
+
+.save-button:hover {
+    transform: scale(1.02);
+}
+
+.description-section {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.description-view {
+    font-size: 16px;
     color: #333;
     margin-bottom: 10px;
+    align-self: center;
+}
+
+.edit-button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #800020;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    align-self: center;
+}
+
+.edit-button:hover {
+    transform: scale(1.02);
 }
 
 /* Favorite Button Styling */

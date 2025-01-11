@@ -130,3 +130,8 @@
 .modal-buttons button:last-child:hover {
     background-color: #bbb;
 }
+
+.published-message {
+    font-weight: bold;
+    margin-top: 20px;
+}

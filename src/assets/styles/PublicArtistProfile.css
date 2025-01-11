@@ -1,12 +1,12 @@
 /* PublicArtistProfile.css */
-.profile-page {
+.profile-page-artist {
     padding: 20px;
     margin: 0 auto;
-    max-width: 800px;
     background-color: white;
-    border-radius: 8px;
+    border-radius: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
+    max-width: 800px;
 }
 
 .profile-main {
@@ -14,7 +14,7 @@
 }
 
 .profile-info {
-    margin-bottom: 20px;
+    margin-bottom: 1px;
 }
 
 .profile-picture {
@@ -27,9 +27,9 @@
 }
 
 .username {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     color: #333;
-    margin-bottom: 10px;
+    margin-bottom: 0;
 }
 
 /* Favorite Button Styling */
@@ -38,40 +38,29 @@
     background-color: #800020;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 28px;
     cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-    width: 20%;
-    transition: background-color 0.3s ease;
+    font-size: 18px;
+    margin-top: 15px;
+    width: 240px;
+    text-align: center;
+    white-space: nowrap;
+    transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease, border 0.3s ease;
+    margin-bottom: 20px;
 }
 
 .favorite-button:hover {
-    background-color: #4a000e;
-}
-
-/* Remove Favorite Button Styling */
-.remove-favorite-button {
-    padding: 10px 20px;
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-    height: 40px;
-    transition: background-color 0.3s ease;
-}
-
-.remove-favorite-button:hover {
-    background-color: #cc0000;
+    transform: scale(1.02);
 }
 
 /* Posts Section Styling */
 .posts-section {
     margin-top: 20px;
     text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
 }
 
 .posts-section h3 {
@@ -93,6 +82,9 @@
     padding: 15px;
     margin-bottom: 15px;
     transition: box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
 }
 
 .post-item:hover {

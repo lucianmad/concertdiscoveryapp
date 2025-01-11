@@ -36,10 +36,15 @@ const Home = ({ user }) => {
                         where('artistId', 'in', followedArtists)
                     );
                     const postsSnapshot = await getDocs(postsQuery);
-                    const postsData = postsSnapshot.docs.map((doc) => ({
-                        id: doc.id,
-                        ...doc.data(),
-                    }));
+                    const postsData = postsSnapshot.docs.map((doc) => {
+                        const postData = doc.data();
+                        console.log('Post Data:', postData);
+                        return {
+                            id: doc.id,
+                            ...postData,
+                            artistProfilePicture: postData.artistProfilePicture || "https://cdn-icons-png.flaticon.com/512/11039/11039534.png", // Ensure this field is included
+                        };
+                    });
 
                     postsData.sort((a, b) => b.timestamp.toDate() - a.timestamp.toDate());
 
@@ -110,12 +115,14 @@ const Home = ({ user }) => {
                         ) : (
                             <ul>
                                 {posts.map((post) => (
-                                    <li key={post.id} className="post-item">
+                                    <li key={post.id} className="post-item-home">
                                         <div className="post-header">
                                             <img
                                                 src={post.artistProfilePicture || "https://cdn-icons-png.flaticon.com/512/11039/11039534.png"}
                                                 alt="Artist"
                                                 className="artist-profile-picture"
+                                                onError={(e) => {
+                                                    e.target.src = "https://cdn-icons-png.flaticon.com/512/11039/11039534.png";}}
                                             />
                                             <div className="post-header-info">
                                                 <h3>{post.artistName}</h3>

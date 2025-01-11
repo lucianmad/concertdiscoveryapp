@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { auth, firestore } from '../firebaseConfig';
-import { doc, getDoc, collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
+import {doc, getDoc, collection, query, where, getDocs, updateDoc, deleteDoc, setDoc} from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import '../assets/styles/PublicArtistProfile.css';
 
@@ -40,6 +40,38 @@ const PublicArtistProfile = () => {
         }
     };
 
+    const handleAddToFavorites = async () => {
+        const user = auth.currentUser;
+        if (user) {
+            try {
+                const favoriteDocRef = doc(firestore, 'favorites', user.uid, 'artists', userId);
+                await setDoc(favoriteDocRef, {
+                    addedAt: new Date(),
+                });
+                setIsFavorite(true);
+            } catch (error) {
+                console.error('Error adding to favorites:', error);
+            }
+        } else {
+            alert('You must be logged in to add artists to favorites.');
+        }
+    };
+
+    const handleRemoveFromFavorites = async () => {
+        const user = auth.currentUser;
+        if (user) {
+            try {
+                const favoriteDocRef = doc(firestore, 'favorites', user.uid, 'artists', userId);
+                await deleteDoc(favoriteDocRef);
+                setIsFavorite(false);
+            } catch (error) {
+                console.error('Error removing from favorites:', error);
+            }
+        } else {
+            alert('You must be logged in to remove artists from favorites.');
+        }
+    };
+
     const fetchData = async (user) => {
         if (!userId) return;
 
@@ -66,6 +98,7 @@ const PublicArtistProfile = () => {
                 setArtist({
                     ...artistData,
                     profilePicture: artistProfilePicture,
+                    publicDescription: artistUserDocSnap.data().publicDescription || "",
                 });
 
                 const favoriteDocRef = doc(firestore, 'favorites', user.uid, 'artists', userId);
@@ -77,11 +110,15 @@ const PublicArtistProfile = () => {
                     where('artistId', '==', userId)
                 );
                 const postsSnapshot = await getDocs(postsQuery);
-                const postsData = postsSnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                    artistProfilePicture: doc.data().artistProfilePicture || artistProfilePicture,
-                }));
+                const postsData = postsSnapshot.docs.map((doc) => {
+                    const postData = doc.data();
+                    console.log('Post Data:', postData);
+                    return {
+                        id: doc.id,
+                        ...postData,
+                        artistProfilePicture: postData.artistProfilePicture || artistProfilePicture,
+                    };
+                });
                 setArtistPosts(postsData);
             } else {
                 setArtist(null);
@@ -115,7 +152,7 @@ const PublicArtistProfile = () => {
     }
 
     return (
-        <div className="profile-page">
+        <div className="profile-page-artist">
             <div className="profile-main">
                 <h1>Artist Profile</h1>
                 <div className="profile-info">
@@ -126,7 +163,23 @@ const PublicArtistProfile = () => {
                     />
                     <h2 className="username">{artist.artistName}</h2>
                 </div>
-                <p>This is a public artist profile.</p>
+                <p>{artist.publicDescription}</p>
+
+                {isFavorite ? (
+                    <button
+                        onClick={handleRemoveFromFavorites}
+                        className="remove-favorite-button"
+                    >
+                        Remove from Favorites
+                    </button>
+                ) : (
+                    <button
+                        onClick={handleAddToFavorites}
+                        className="favorite-button"
+                    >
+                        Add to Favorites
+                    </button>
+                )}
 
                 <div className="posts-section">
                     <h3>Posts</h3>
@@ -138,6 +191,9 @@ const PublicArtistProfile = () => {
                                         src={post.artistProfilePicture || defaultProfilePicture}
                                         alt="Artist"
                                         className="artist-profile-picture"
+                                        onError={(e) => {
+                                            e.target.src = "https://cdn-icons-png.flaticon.com/512/11039/11039534.png";
+                                        }}
                                     />
                                     <div className="post-header-info">
                                         <h3>{post.artistName}</h3>

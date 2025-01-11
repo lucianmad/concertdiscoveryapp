@@ -4,20 +4,15 @@ body {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  height: 100vh;
-  background: linear-gradient(135deg, #800020, #4a003f);
+  min-height: 100vh;
+  background: linear-gradient(135deg, #800020, #4a003f) fixed;
   color: white;
 }
-
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 #root {
-  height: 100%;
-}
-
-html, body {
   height: 100%;
 }
