@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { collection, addDoc } from 'firebase/firestore';
-import { firestore, auth } from '../firebaseConfig';
+import { collection, addDoc, getDoc, doc } from 'firebase/firestore';
+import { firestore, auth, storage } from '../firebaseConfig';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import '../assets/styles/EventCreationForm.css';
 
 const EventCreationForm = () => {
@@ -8,11 +9,37 @@ const EventCreationForm = () => {
     const [eventLocation, setEventLocation] = useState('');
     const [eventDate, setEventDate] = useState('');
     const [eventDescription, setEventDescription] = useState('');
+    const [eventPhoto, setEventPhoto] = useState(null);
+    const [photoName, setPhotoName] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleCreateEvent = async (e) => {
         e.preventDefault();
         setLoading(true);
+
+        if (!auth.currentUser) {
+            alert('You must be logged in to create an event.');
+            setLoading(false);
+            return;
+        }
+
+        const userDoc = await getDoc(doc(firestore, 'users', auth.currentUser.uid));
+        const userData = userDoc.data();
+
+        console.log('User Data:', userData);
+
+        if (!userData?.isManager) {
+            alert('Only managers can create events.');
+            setLoading(false);
+            return;
+        }
+
+        let photoUrl = null;
+        if (eventPhoto) {
+            const storageRef = ref(storage, `events/${eventPhoto.name}`);
+            await uploadBytes(storageRef, eventPhoto);
+            photoUrl = await getDownloadURL(storageRef);
+        }
 
         const eventData = {
             name: eventName,
@@ -20,10 +47,9 @@ const EventCreationForm = () => {
             date: eventDate,
             description: eventDescription,
             userId: auth.currentUser.uid,
-            artistIds: []
+            artistIds: [],
+            photoUrl: photoUrl,
         };
-
-        console.log("Event Data:", eventData);
 
         try {
             await addDoc(collection(firestore, 'events'), eventData);
@@ -32,6 +58,8 @@ const EventCreationForm = () => {
             setEventLocation('');
             setEventDate('');
             setEventDescription('');
+            setEventPhoto(null);
+            setPhotoName('');
         } catch (error) {
             console.error('Error creating event:', error);
             alert('Failed to create event.');
@@ -40,37 +68,68 @@ const EventCreationForm = () => {
         }
     };
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setEventPhoto(file);
+            setPhotoName(file.name);
+        }
+    };
+
     return (
         <div className="event-creation-form">
             <h1>Create Event</h1>
-            <form onSubmit={handleCreateEvent}>
-                <input
-                    type="text"
-                    placeholder="Event Name"
-                    value={eventName}
-                    onChange={(e) => setEventName(e.target.value)}
-                    required
-                />
-                <input
-                    type="text"
-                    placeholder="Location"
-                    value={eventLocation}
-                    onChange={(e) => setEventLocation(e.target.value)}
-                    required
-                />
-                <input
-                    type="date"
-                    value={eventDate}
-                    onChange={(e) => setEventDate(e.target.value)}
-                    required
-                />
-                <textarea
-                    placeholder="Description"
-                    value={eventDescription}
-                    onChange={(e) => setEventDescription(e.target.value)}
-                    required
-                />
-                <button type="submit" disabled={loading}>
+            <form onSubmit={handleCreateEvent} className="change-profile-picture-form">
+                <div className="form-group">
+                    <label htmlFor="event-name">Event Name:</label>
+                    <input
+                        type="text"
+                        id="event-name"
+                        value={eventName}
+                        onChange={(e) => setEventName(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="event-location">Location:</label>
+                    <input
+                        type="text"
+                        id="event-location"
+                        value={eventLocation}
+                        onChange={(e) => setEventLocation(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="event-date">Date:</label>
+                    <input
+                        type="date"
+                        id="event-date"
+                        value={eventDate}
+                        onChange={(e) => setEventDate(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="event-description">Description:</label>
+                    <textarea
+                        id="event-description"
+                        value={eventDescription}
+                        onChange={(e) => setEventDescription(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="file-upload">Upload Event Photo:</label>
+                    <input
+                        type="file"
+                        id="file-upload"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                    />
+                    {photoName && <p className="file-name">Selected file: {photoName}</p>}
+                </div>
+                <button type="submit" disabled={loading} className="btn-submit">
                     {loading ? 'Creating Event...' : 'Create Event'}
                 </button>
             </form>

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { firestore, auth } from '../firebaseConfig';
-import {collection, doc, getDoc, getDocs, deleteDoc} from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, deleteDoc } from 'firebase/firestore';
 import '../assets/styles/Favorites.css';
-import {Link} from "react-router-dom";
+import { Link } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const Favorites = () => {
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchFavorites = async () => {
-            const user = auth.currentUser;
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
                     const favoritesRef = collection(firestore, 'favorites', user.uid, 'artists');
@@ -37,10 +37,12 @@ const Favorites = () => {
                 } finally {
                     setLoading(false);
                 }
+            } else {
+                setLoading(false);
             }
-        };
+        });
 
-        fetchFavorites();
+        return () => unsubscribe();
     }, []);
 
     const handleRemoveFromFavorites = async (artistId) => {

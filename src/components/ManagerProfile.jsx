@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth, firestore } from '../firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
 import '../assets/styles/ManagerProfile.css';
 import '../assets/styles/Profile.css';
 
@@ -13,22 +14,32 @@ const ManagerProfile = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            const user = auth.currentUser;
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
-                const userDocRef = doc(firestore, 'users', user.uid);
-                const docSnap = await getDoc(userDocRef);
-                if (docSnap.exists()) {
-                    const userData = docSnap.data();
-                    setUsername(userData.username || "Anonymous");
-                    setProfilePicture(userData.profilePicture || defaultProfilePicture);
-                }
+                await fetchUserData(user);
+            } else {
+                setLoading(false);
             }
-            setLoading(false);
-        };
+        });
 
-        fetchUserData();
+        return () => unsubscribe();
     }, []);
+
+    const fetchUserData = async (user) => {
+        try {
+            const userDocRef = doc(firestore, 'users', user.uid);
+            const docSnap = await getDoc(userDocRef);
+            if (docSnap.exists()) {
+                const userData = docSnap.data();
+                setUsername(userData.username || "Anonymous");
+                setProfilePicture(userData.profilePicture || defaultProfilePicture);
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handlePendingRequests = () => {
         navigate('/pending-requests');
@@ -68,6 +79,9 @@ const ManagerProfile = () => {
                         src={profilePicture}
                         alt="Profile"
                         className="profile-picture"
+                        onError={(e) => {
+                            e.target.src = defaultProfilePicture;
+                        }}
                     />
                     <h2 className="username">{username}</h2>
                 </div>

@@ -24,19 +24,43 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 15px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    gap: 20px;
 }
 
-.pending-requests-page .request-item p {
+.pending-requests-page .event-photo {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.pending-requests-page .event-details {
+    flex: 1;
+}
+
+.pending-requests-page .event-details h2 {
     margin: 0;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.pending-requests-page .event-details p {
+    margin: 5px 0;
     font-size: 1rem;
     color: #555;
 }
 
-.pending-requests-page .request-item button {
+.pending-requests-page .request-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.pending-requests-page .request-actions button {
     background-color: #007bff;
     color: white;
     border: none;
@@ -46,6 +70,6 @@
     font-size: 0.9rem;
 }
 
-.pending-requests-page .request-item button:hover {
+.pending-requests-page .request-actions button:hover {
     background-color: #0056b3;
 }

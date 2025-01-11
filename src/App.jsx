@@ -261,8 +261,9 @@ const Header = ({ user, setUser }) => {
                                     key={user.id}
                                     className="search-result-item"
                                     onClick={() => {
-                                        navigate(`/artist/${user.id}`);
-                                        setShowResults(false);
+                                        setSearchQuery(''); // Clear the search input
+                                        setShowResults(false); // Hide the results dropdown
+                                        navigate(`/artist/${user.id}`); // Navigate to the artist's profile
                                     }}
                                 >
                                     <img

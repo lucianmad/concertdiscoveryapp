@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { auth, firestore } from '../firebaseConfig';
 import { collection, query, where, getDocs, getDoc, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import '../assets/styles/SearchResults.css';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const SearchResults = () => {
     const location = useLocation();
@@ -13,61 +14,64 @@ const SearchResults = () => {
     const defaultProfilePicture = "https://cdn-icons-png.flaticon.com/512/11039/11039534.png";
 
     useEffect(() => {
-        const fetchArtistsAndFavorites = async () => {
-            const user = auth.currentUser;
-            if (user) {
-                try {
-                    const artistsRef = collection(firestore, 'artists');
-                    const querySnapshot = await getDocs(artistsRef);
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user && searchQuery) {
+                await fetchArtistsAndFavorites(user.uid);
+            } else {
+                setLoading(false);
+            }
+        });
 
-                    const artists = [];
-                    for (const document of querySnapshot.docs) {
-                        const artistData = document.data();
+        return () => unsubscribe();
+    }, [searchQuery]);
 
-                        if (artistData.artistName.toLowerCase().includes(searchQuery.toLowerCase())) {
-                            const userDocRef = doc(firestore, 'users', artistData.userId);
-                            const userDocSnap = await getDoc(userDocRef);
+    const fetchArtistsAndFavorites = async (userId) => {
+        try {
+            const artistsRef = collection(firestore, 'artists');
+            const querySnapshot = await getDocs(artistsRef);
 
-                            if (userDocSnap.exists()) {
-                                const userData = userDocSnap.data();
-                                artists.push({
-                                    id: document.id,
-                                    ...artistData,
-                                    profilePicture: userData.profilePicture || defaultProfilePicture,
-                                });
-                            } else {
-                                artists.push({
-                                    id: document.id,
-                                    ...artistData,
-                                    profilePicture: defaultProfilePicture,
-                                });
-                            }
-                        }
+            const artists = [];
+            for (const document of querySnapshot.docs) {
+                const artistData = document.data();
+
+                if (artistData.artistName.toLowerCase().includes(searchQuery.toLowerCase())) {
+                    const userDocRef = doc(firestore, 'users', artistData.userId);
+                    const userDocSnap = await getDoc(userDocRef);
+
+                    if (userDocSnap.exists()) {
+                        const userData = userDocSnap.data();
+                        artists.push({
+                            id: document.id,
+                            ...artistData,
+                            profilePicture: userData.profilePicture || defaultProfilePicture,
+                        });
+                    } else {
+                        artists.push({
+                            id: document.id,
+                            ...artistData,
+                            profilePicture: defaultProfilePicture,
+                        });
                     }
-
-                    setResults(artists);
-
-                    const favoritesRef = collection(firestore, 'favorites', user.uid, 'artists');
-                    const favoritesSnapshot = await getDocs(favoritesRef);
-
-                    const favoriteArtists = [];
-                    favoritesSnapshot.forEach((doc) => {
-                        favoriteArtists.push(doc.id);
-                    });
-
-                    setFavorites(favoriteArtists);
-                } catch (error) {
-                    console.error('Error fetching data:', error);
-                } finally {
-                    setLoading(false);
                 }
             }
-        };
 
-        if (searchQuery) {
-            fetchArtistsAndFavorites();
+            setResults(artists);
+
+            const favoritesRef = collection(firestore, 'favorites', userId, 'artists');
+            const favoritesSnapshot = await getDocs(favoritesRef);
+
+            const favoriteArtists = [];
+            favoritesSnapshot.forEach((doc) => {
+                favoriteArtists.push(doc.id);
+            });
+
+            setFavorites(favoriteArtists);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } finally {
+            setLoading(false);
         }
-    }, [searchQuery]);
+    };
 
     const handleAddToFavorites = async (artistId, profilePicture) => {
         const user = auth.currentUser;

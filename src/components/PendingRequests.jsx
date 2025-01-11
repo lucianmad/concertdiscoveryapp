@@ -1,72 +1,84 @@
 import React, { useEffect, useState } from 'react';
-import {collection, query, where, getDocs, doc, updateDoc} from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { firestore, auth } from '../firebaseConfig';
 import '../assets/styles/PendingRequests.css';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const PendingRequests = () => {
     const [pendingRequests, setPendingRequests] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchPendingRequests = async () => {
-        const user = auth.currentUser;
-        if (user) {
-            try {
-                const managerQuery = query(
-                    collection(firestore, 'pendingRequests'),
-                    where('userId', '==', user.uid),
-                    where('status', '==', 'pending')
-                );
-
-                const artistQuery = query(
-                    collection(firestore, 'pendingRequests'),
-                    where('artistId', '==', user.uid),
-                    where('status', '==', 'pending')
-                );
-
-                const [managerSnapshot, artistSnapshot] = await Promise.all([
-                    getDocs(managerQuery),
-                    getDocs(artistQuery),
-                ]);
-
-                // Combine the results
-                const managerRequests = managerSnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                    role: 'manager'
-                }));
-                const artistRequests = artistSnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                    role: 'artist'
-                }));
-
-                const allRequests = [...managerRequests, ...artistRequests];
-                const uniqueRequests = allRequests.filter(
-                    (request, index, self) => index === self.findIndex((r) => r.id === request.id)
-                );
-
-                setPendingRequests(uniqueRequests);
-            } catch (error) {
-                console.error('Error fetching pending requests:', error);
-            } finally {
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                await fetchPendingRequests(user.uid);
+            } else {
                 setLoading(false);
             }
-        } else {
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    const fetchPendingRequests = async (userId) => {
+        try {
+            const managerQuery = query(
+                collection(firestore, 'pendingRequests'),
+                where('userId', '==', userId),
+                where('status', '==', 'pending')
+            );
+
+            const artistQuery = query(
+                collection(firestore, 'pendingRequests'),
+                where('artistId', '==', userId),
+                where('status', '==', 'pending')
+            );
+
+            const [managerSnapshot, artistSnapshot] = await Promise.all([
+                getDocs(managerQuery),
+                getDocs(artistQuery),
+            ]);
+
+            const managerRequests = managerSnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+                role: 'manager',
+            }));
+            const artistRequests = artistSnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+                role: 'artist',
+            }));
+
+            const allRequests = [...managerRequests, ...artistRequests];
+            const uniqueRequests = allRequests.filter(
+                (request, index, self) => index === self.findIndex((r) => r.id === request.id)
+            );
+
+            const requestsWithEventDetails = await Promise.all(
+                uniqueRequests.map(async (request) => {
+                    const eventDoc = await getDoc(doc(firestore, 'events', request.eventId));
+                    return {
+                        ...request,
+                        event: eventDoc.exists() ? eventDoc.data() : null,
+                    };
+                })
+            );
+
+            setPendingRequests(requestsWithEventDetails);
+        } catch (error) {
+            console.error('Error fetching pending requests:', error);
+        } finally {
             setLoading(false);
         }
     };
-
-    useEffect(() => {
-        fetchPendingRequests();
-    }, []);
 
     const handleAcceptRequest = async (requestId) => {
         try {
             const requestRef = doc(firestore, 'pendingRequests', requestId);
             await updateDoc(requestRef, { status: 'accepted' });
             alert('Request accepted successfully!');
-            // Refresh the list of pending requests
-            fetchPendingRequests();
+            fetchPendingRequests(auth.currentUser.uid);
         } catch (error) {
             console.error('Error accepting request:', error);
             alert('Failed to accept request.');
@@ -78,7 +90,7 @@ const PendingRequests = () => {
             const requestRef = doc(firestore, 'pendingRequests', requestId);
             await updateDoc(requestRef, { status: 'rejected' });
             alert('Request declined successfully!');
-            fetchPendingRequests();
+            fetchPendingRequests(auth.currentUser.uid);
         } catch (error) {
             console.error('Error declining request:', error);
             alert('Failed to decline request.');
@@ -98,14 +110,26 @@ const PendingRequests = () => {
                 <ul>
                     {pendingRequests.map((request) => (
                         <li key={request.id} className="request-item">
-                            <p>Event ID: {request.eventId}</p>
-                            <p>Artist ID: {request.artistId}</p>
-                            <p>Role: {request.role}</p>
-                            {request.role === 'artist' && (
-                                <div>
-                                    <button onClick={() => handleAcceptRequest(request.id)}>Accept</button>
-                                    <button onClick={() => handleDeclineRequest(request.id)}>Decline</button>
-                                </div>
+                            {request.event && (
+                                <>
+                                    <img
+                                        src={request.event.photoUrl || "https://cdn-icons-png.flaticon.com/512/11039/11039534.png"}
+                                        alt="Event"
+                                        className="event-photo"
+                                    />
+                                    <div className="event-details">
+                                        <h2>{request.event.name}</h2>
+                                        <p><strong>Location:</strong> {request.event.location}</p>
+                                        <p><strong>Date:</strong> {request.event.date}</p>
+                                        <p><strong>Description:</strong> {request.event.description}</p>
+                                        {request.role === 'artist' && (
+                                            <div className="request-actions">
+                                                <button onClick={() => handleAcceptRequest(request.id)}>Accept</button>
+                                                <button onClick={() => handleDeclineRequest(request.id)}>Decline</button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </>
                             )}
                         </li>
                     ))}

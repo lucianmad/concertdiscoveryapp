@@ -92,7 +92,7 @@ h2 {
 
 
 /* Submit Button styling */
-.btn-submit {
+.login-signup-container .btn-submit {
     width: 100%;
     padding: 12px 24px;
     font-size: 18px;

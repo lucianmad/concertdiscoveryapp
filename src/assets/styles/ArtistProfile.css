@@ -65,9 +65,9 @@
 /* Add to Event Button Styling */
 .add-to-event-button {
     padding: 10px 20px;
-    background-color: white; /* Reversed colors */
-    color: #800020; /* Reversed colors */
-    border: 2px solid #800020; /* Added border */
+    background-color: white;
+    color: #800020;
+    border: 2px solid #800020;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
@@ -76,8 +76,8 @@
 }
 
 .add-to-event-button:hover {
-    background-color: #800020; /* Reversed hover colors */
-    color: white; /* Reversed hover colors */
+    background-color: #800020;
+    color: white;
 }
 
 /* Event Modal Styling */

@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { auth, firestore } from '../firebaseConfig';
 import '../assets/styles/ArtistProfile.css';
 import '../assets/styles/Profile.css';
-import {doc, getDoc} from "firebase/firestore";
+import { doc, getDoc } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const ArtistProfile = () => {
     const defaultProfilePicture = "https://cdn-icons-png.flaticon.com/512/11039/11039534.png";
@@ -13,8 +14,7 @@ const ArtistProfile = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            const user = auth.currentUser;
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDocRef = doc(firestore, 'users', user.uid);
                 const docSnap = await getDoc(userDocRef);
@@ -23,12 +23,14 @@ const ArtistProfile = () => {
                     setUsername(userData.username || "Anonymous");
                     setProfilePicture(userData.profilePicture || defaultProfilePicture);
                 }
+            } else {
+                navigate('/login');
             }
             setLoading(false);
-        };
+        });
 
-        fetchUserData();
-    }, []);
+        return () => unsubscribe();
+    }, [navigate]);
 
     const handlePendingRequests = () => {
         navigate('/pending-requests');
