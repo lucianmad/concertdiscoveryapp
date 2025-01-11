@@ -116,24 +116,44 @@ const PublicArtistProfile = () => {
         }
 
         try {
+            console.log("Fetching event document...");
             const eventRef = doc(firestore, 'events', selectedEventId);
             const eventDoc = await getDoc(eventRef);
-            const eventData = eventDoc.data();
-            const updatedArtistIds = [...eventData.artistIds, userId];
 
+            if (!eventDoc.exists()) {
+                alert('Event not found.');
+                return;
+            }
+
+            console.log("Event document fetched successfully:", eventDoc.data());
+
+            const eventData = eventDoc.data();
+            const updatedArtistIds = [...eventData.artistIds];
+
+            if (updatedArtistIds.includes(userId)) {
+                alert('Artist is already added to this event.');
+                return;
+            }
+
+            console.log("Adding artist to event...");
+            updatedArtistIds.push(userId);
             await updateDoc(eventRef, { artistIds: updatedArtistIds });
 
+            console.log("Artist added to event. Creating pending request...");
             await addDoc(collection(firestore, 'pendingRequests'), {
                 userId: auth.currentUser.uid,
                 artistId: userId,
                 eventId: selectedEventId,
-                status: 'pending'
+                status: 'pending',
+                timestamp: new Date(),
             });
 
-            alert('Artist added to event successfully!');
+            console.log("Pending request created successfully.");
+            //alert('Artist added to event successfully!');
             setShowEventModal(false);
         } catch (error) {
-            alert('Failed to add artist to event.');
+            console.error('Error adding artist to event:', error);
+            //alert('Failed to add artist to event.');
         }
     };
 

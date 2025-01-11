@@ -33,7 +33,7 @@
 }
 
 .event-creation-form button {
-    background-color: #007bff;
+    background-color: #800020;
     color: white;
     border: none;
     border-radius: 4px;
@@ -43,7 +43,8 @@
 }
 
 .event-creation-form button:hover {
-    background-color: #0056b3;
+    background-color: #4a003f;
+    transform: scale(1.05);
 }
 
 .event-creation-form button:disabled {

@@ -30,12 +30,14 @@
 }
 
 .profile-menu li {
-    padding: 15px;
+    padding: 0;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
     font-size: 1rem;
     text-align: left;
+    width: 100%; /* Ensure li takes full width */
+    margin-bottom: 10px;
 }
 
 /* Link styling within the profile menu */
@@ -44,6 +46,10 @@
     text-decoration: none;
     font-size: inherit;
     display: block;
+    padding: 15px; /* Add padding to the link instead of the li */
+    width: 100%; /* Ensure the link takes full width */
+    box-sizing: border-box; /* Include padding in width calculation */
+    border-radius: 4px;
 }
 
 /* Hover effect for list items */

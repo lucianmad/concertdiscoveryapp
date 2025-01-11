@@ -23,6 +23,8 @@ const EventCreationForm = () => {
             artistIds: []
         };
 
+        console.log("Event Data:", eventData);
+
         try {
             await addDoc(collection(firestore, 'events'), eventData);
             alert('Event created successfully!');

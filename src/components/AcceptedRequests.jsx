@@ -11,16 +11,54 @@ const AcceptedRequests = () => {
         const fetchAcceptedRequests = async () => {
             const user = auth.currentUser;
             if (user) {
-                const q = query(
-                    collection(firestore, 'pendingRequests'),
-                    where('userId', '==', user.uid),
-                    where('status', '==', 'accepted')
-                );
-                const querySnapshot = await getDocs(q);
-                const requests = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-                setAcceptedRequests(requests);
+                try {
+                    // Query for requests where the user is the manager (userId)
+                    const managerQuery = query(
+                        collection(firestore, 'pendingRequests'),
+                        where('userId', '==', user.uid),
+                        where('status', '==', 'accepted')
+                    );
+
+                    // Query for requests where the user is the artist (artistId)
+                    const artistQuery = query(
+                        collection(firestore, 'pendingRequests'),
+                        where('artistId', '==', user.uid),
+                        where('status', '==', 'accepted')
+                    );
+
+                    // Execute both queries
+                    const [managerSnapshot, artistSnapshot] = await Promise.all([
+                        getDocs(managerQuery),
+                        getDocs(artistQuery),
+                    ]);
+
+                    // Combine the results
+                    const managerRequests = managerSnapshot.docs.map((doc) => ({
+                        id: doc.id,
+                        ...doc.data(),
+                        role: 'manager'
+                    }));
+                    const artistRequests = artistSnapshot.docs.map((doc) => ({
+                        id: doc.id,
+                        ...doc.data(),
+                        role: 'artist'
+                    }));
+
+                    // Merge and deduplicate requests
+                    const allRequests = [...managerRequests, ...artistRequests];
+                    const uniqueRequests = allRequests.filter(
+                        (request, index, self) => index === self.findIndex((r) => r.id === request.id)
+                    );
+
+                    setAcceptedRequests(uniqueRequests);
+                } catch (error) {
+                    console.error('Error fetching accepted requests:', error);
+                } finally {
+                    setLoading(false);
+                }
+            } else {
+                setLoading(false);
             }
-            setLoading(false);
         };
 
         fetchAcceptedRequests();
@@ -41,6 +79,7 @@ const AcceptedRequests = () => {
                         <li key={request.id} className="request-item">
                             <p>Event ID: {request.eventId}</p>
                             <p>Artist ID: {request.artistId}</p>
+                            <p>Role: {request.role}</p>
                         </li>
                     ))}
                 </ul>

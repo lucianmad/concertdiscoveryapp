@@ -25,10 +25,10 @@ const Profile = ({ username, profilePicture, isArtist, isManager }) => {
         <div className="profile-page">
             <div className="profile-menu">
                 <ul>
-                    <li><Link to="/favorites">Your Favorite Artists</Link></li>
-                    <li><Link to="/change-profile-picture">Change Profile Picture</Link></li>
-                    <li><Link to="/become-artist">Become an Artist</Link></li>
-                    <li><Link to="/become-manager">Become a Manager</Link></li>
+                    <li><Link to="/favorites" className="menu-link">Your Favorite Artists</Link></li>
+                    <li><Link to="/change-profile-picture" className="menu-link">Change Profile Picture</Link></li>
+                    <li><Link to="/become-artist" className="menu-link">Become an Artist</Link></li>
+                    <li><Link to="/become-manager" className="menu-link">Become a Manager</Link></li>
                 </ul>
             </div>
             <div className="profile-main">
