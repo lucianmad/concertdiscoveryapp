@@ -161,3 +161,17 @@ h2 {
         gap: 15px;
     }
 }
+
+/* Forgot Password Link */
+.forgot-password {
+    font-size: 14px;
+    color: #555;
+    margin-top: 10px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.forgot-password:hover {
+    color: #4a003f;
+    text-decoration: none;
+}

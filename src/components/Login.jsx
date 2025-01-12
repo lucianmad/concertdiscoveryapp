@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { auth, firestore } from '../firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,7 @@ const Login = ({ setUser }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [resetEmailSent, setResetEmailSent] = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
@@ -41,6 +42,21 @@ const Login = ({ setUser }) => {
             } else {
                 setError('User data not found.');
             }
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
+    const handleForgotPassword = async () => {
+        if (!email) {
+            setError('Please enter your email address.');
+            return;
+        }
+
+        try {
+            await sendPasswordResetEmail(auth, email);
+            setResetEmailSent(true);
+            setError('');
         } catch (err) {
             setError(err.message);
         }
@@ -86,6 +102,7 @@ const Login = ({ setUser }) => {
                     </div>
 
                     {error && <p className="error">{error}</p>}
+                    {resetEmailSent && <p className="success">Password reset email sent. Check your inbox.</p>}
 
                     <button type="submit" className="btn-submit">
                         Login
@@ -95,6 +112,11 @@ const Login = ({ setUser }) => {
                 <p className="toggle-text">
                     Don't have an account?{' '}
                     <span onClick={() => navigate('/signup')}>Sign Up</span>
+                </p>
+
+                <p className="toggle-text">
+                    Forgot your password?{' '}
+                    <span onClick={handleForgotPassword}>Reset Password</span>
                 </p>
             </div>
         </div>

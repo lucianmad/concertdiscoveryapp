@@ -4,6 +4,7 @@ import { auth, firestore } from './firebaseConfig';
 import { doc, getDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
+import ForgotPassword from './components/ForgotPassword';
 import Profile from './components/Profile';
 import Settings from './components/Settings';
 import Home from './components/Home';
@@ -65,6 +66,7 @@ const App = () => {
                         <Route path="/" element={<Home user={user} />} />
                         <Route path="/login" element={<Login setUser={setUser} />} />
                         <Route path="/signup" element={<SignUp setUser={setUser} />} />
+                        <Route path="/forgot-password" element={<ForgotPassword />} /> {/* Add this route */}
                         <Route
                             path="/search"
                             element={user ? <SearchResults /> : <Navigate to="/login" />}
@@ -131,7 +133,6 @@ const App = () => {
                             path="/delete-account"
                             element={user ? <DeleteAccount /> : <Navigate to="/login" />}
                         />
-                        {/* Add new routes here */}
                         <Route
                             path="/pending-requests"
                             element={user ? <PendingRequests /> : <Navigate to="/login" />}
