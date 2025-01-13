@@ -40,8 +40,20 @@ const BecomeManager = () => {
                 status: "pending",
             });
 
-            setStatus("Your application has been submitted! An admin will review it shortly.");
-            setShowBackButton(true);
+            const response = await fetch("https://sendemail-4gbyv5twhq-uc.a.run.app", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                setStatus("Your application has been submitted!");
+                setShowBackButton(true);
+            } else {
+                setStatus("Failed to submit. Please try again later.");
+            }
         } catch (error) {
             console.error("Error submitting form:", error);
             setStatus("Error occurred. Please try again.");
