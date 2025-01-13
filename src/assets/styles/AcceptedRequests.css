@@ -55,7 +55,7 @@
 }
 
 .accepted-requests-page .publish-post-button {
-    background-color: #4a000e;
+    background-color: #800020;
     color: white;
     border: none;
     border-radius: 4px;
@@ -66,7 +66,7 @@
 }
 
 .accepted-requests-page .publish-post-button:hover {
-    background-color: #800020;
+    background-color: #4a000e;
 }
 
 .post-modal {
@@ -114,12 +114,12 @@
 }
 
 .modal-buttons button:first-child {
-    background-color: #4a000e;
+    background-color: #800020;
     color: white;
 }
 
 .modal-buttons button:first-child:hover {
-    background-color: #800020;
+    background-color: #4a000e;
 }
 
 .modal-buttons button:last-child {

@@ -77,7 +77,6 @@ const PendingRequests = () => {
         try {
             const requestRef = doc(firestore, 'pendingRequests', requestId);
             await updateDoc(requestRef, { status: 'accepted' });
-            alert('Request accepted successfully!');
             fetchPendingRequests(auth.currentUser.uid);
         } catch (error) {
             console.error('Error accepting request:', error);
@@ -89,7 +88,6 @@ const PendingRequests = () => {
         try {
             const requestRef = doc(firestore, 'pendingRequests', requestId);
             await updateDoc(requestRef, { status: 'rejected' });
-            alert('Request declined successfully!');
             fetchPendingRequests(auth.currentUser.uid);
         } catch (error) {
             console.error('Error declining request:', error);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { auth, firestore } from '../firebaseConfig';
-import {doc, getDoc, collection, query, where, getDocs, updateDoc, deleteDoc, setDoc} from 'firebase/firestore';
+import {doc, getDoc, collection, query, where, getDocs, updateDoc, deleteDoc, setDoc, addDoc} from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import '../assets/styles/PublicArtistProfile.css';
 
@@ -11,6 +11,9 @@ const PublicArtistProfile = () => {
     const [isFavorite, setIsFavorite] = useState(false);
     const [loading, setLoading] = useState(true);
     const [isManager, setIsManager] = useState(false);
+    const [showEventModal, setShowEventModal] = useState(false);
+    const [events, setEvents] = useState([]);
+    const [selectedEventId, setSelectedEventId] = useState('');
     const [artistPosts, setArtistPosts] = useState([]);
     const defaultProfilePicture = "https://cdn-icons-png.flaticon.com/512/11039/11039534.png";
 
@@ -143,6 +146,62 @@ const PublicArtistProfile = () => {
         return () => unsubscribe();
     }, [userId]);
 
+    const fetchManagerEvents = async () => {
+        const user = auth.currentUser;
+        if (user) {
+            const q = query(collection(firestore, 'events'), where('userId', '==', user.uid));
+            const querySnapshot = await getDocs(q);
+            const eventsData = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+            setEvents(eventsData);
+        }
+    };
+
+    const handleAddToEvent = async () => {
+        if (!selectedEventId) {
+            alert('Please select an event.');
+            return;
+        }
+
+        try {
+            console.log("Fetching event document...");
+            const eventRef = doc(firestore, 'events', selectedEventId);
+            const eventDoc = await getDoc(eventRef);
+
+            if (!eventDoc.exists()) {
+                alert('Event not found.');
+                return;
+            }
+
+            console.log("Event document fetched successfully:", eventDoc.data());
+
+            const eventData = eventDoc.data();
+            const updatedArtistIds = [...eventData.artistIds];
+
+            if (updatedArtistIds.includes(userId)) {
+                alert('Artist is already added to this event.');
+                return;
+            }
+
+            console.log("Adding artist to event...");
+            updatedArtistIds.push(userId);
+            await updateDoc(eventRef, { artistIds: updatedArtistIds });
+
+            console.log("Artist added to event. Creating pending request...");
+            await addDoc(collection(firestore, 'pendingRequests'), {
+                userId: auth.currentUser.uid,
+                artistId: userId,
+                eventId: selectedEventId,
+                status: 'pending',
+                timestamp: new Date(),
+            });
+
+            console.log("Pending request created successfully.");
+            setShowEventModal(false);
+        } catch (error) {
+            console.error('Error adding artist to event:', error);
+        }
+    };
+
     if (loading) {
         return <p>Loading...</p>;
     }
@@ -179,6 +238,38 @@ const PublicArtistProfile = () => {
                     >
                         Add to Favorites
                     </button>
+                )}
+
+                {isManager && (
+                    <>
+                    <button
+                        className="add-to-event-button"
+                        onClick={() => { setShowEventModal(true); fetchManagerEvents(); }}
+                    >
+                        Add to Event
+                    </button>
+
+                    {showEventModal && (
+                        <div className="event-modal">
+                            <div className="event-modal-content">
+                                <h2>Select an Event</h2>
+                                <select
+                                    value={selectedEventId}
+                                    onChange={(e) => setSelectedEventId(e.target.value)}
+                                >
+                                    <option value="">Select an event</option>
+                                    {events.map((event) => (
+                                        <option key={event.id} value={event.id}>
+                                            {event.name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <button onClick={handleAddToEvent}>Add</button>
+                                <button onClick={() => setShowEventModal(false)} className="cancel-button">Cancel</button>
+                            </div>
+                        </div>
+                    )}
+                    </>
                 )}
 
                 <div className="posts-section">

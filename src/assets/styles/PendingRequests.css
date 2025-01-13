@@ -61,7 +61,7 @@
 }
 
 .pending-requests-page .request-actions button {
-    background-color: #007bff;
+    background-color: #800020;
     color: white;
     border: none;
     border-radius: 4px;
@@ -71,5 +71,7 @@
 }
 
 .pending-requests-page .request-actions button:hover {
-    background-color: #0056b3;
+    background-color: #800020;
+    transform: scale(1.02);
+
 }

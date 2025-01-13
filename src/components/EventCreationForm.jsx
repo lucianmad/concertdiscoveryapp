@@ -35,10 +35,14 @@ const EventCreationForm = () => {
         }
 
         let photoUrl = null;
-        if (eventPhoto) {
-            const storageRef = ref(storage, `events/${eventPhoto.name}`);
-            await uploadBytes(storageRef, eventPhoto);
-            photoUrl = await getDownloadURL(storageRef);
+        try {
+            if (eventPhoto) {
+                const storageRef = ref(storage, `events/${eventPhoto.name}`);
+                await uploadBytes(storageRef, eventPhoto);
+                photoUrl = await getDownloadURL(storageRef);
+            }
+        } catch (error) {
+            console.error('Error uploading event photo:', error);
         }
 
         const eventData = {

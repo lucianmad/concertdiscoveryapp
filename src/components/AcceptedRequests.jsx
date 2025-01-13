@@ -114,7 +114,6 @@ const AcceptedRequests = () => {
                         published: true,
                     });
 
-                    alert('Post published successfully!');
                     setShowPostModal(false);
                     setPostDescription('');
                     setSelectedEvent(null);
